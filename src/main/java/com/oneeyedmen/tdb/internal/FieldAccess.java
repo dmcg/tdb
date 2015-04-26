@@ -1,4 +1,4 @@
-package org.rococoa.tdb.internal;
+package com.oneeyedmen.tdb.internal;
 
 import org.jmock.api.Invocation;
 import org.jmock.api.Invokable;

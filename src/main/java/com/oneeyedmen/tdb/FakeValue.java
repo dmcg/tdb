@@ -1,12 +1,12 @@
 
-package org.rococoa.tdb;
+package com.oneeyedmen.tdb;
 
+import com.oneeyedmen.tdb.internal.FieldAccess;
+import com.oneeyedmen.tdb.internal.MethodAccess;
 import org.jmock.api.Imposteriser;
 import org.jmock.api.Invokable;
 import org.jmock.internal.ProxiedObjectIdentity;
 import org.jmock.lib.legacy.ClassImposteriser;
-import org.rococoa.tdb.internal.FieldAccess;
-import org.rococoa.tdb.internal.MethodAccess;
 
 import java.lang.reflect.ParameterizedType;
 

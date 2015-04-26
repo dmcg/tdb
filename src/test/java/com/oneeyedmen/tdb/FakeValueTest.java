@@ -1,7 +1,6 @@
-package org.rococoa.tdb;
+package com.oneeyedmen.tdb;
 
 import org.junit.Test;
-import org.rococoa.tdb.FakeValue;
 
 import static org.junit.Assert.*;
 

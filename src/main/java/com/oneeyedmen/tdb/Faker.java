@@ -10,7 +10,7 @@ import org.jmock.lib.legacy.ClassImposteriser;
 
 import java.lang.reflect.ParameterizedType;
 
-public class FakeValue<T> {
+public class Faker<T> {
 
     private static final Imposteriser IMPOSTERISER = ClassImposteriser.INSTANCE;
 

@@ -26,5 +26,8 @@
         <module name="tdb" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="tdb" target="1.6" />
+    </bytecodeTargetLevel>
   </component>
 </project>

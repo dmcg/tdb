@@ -6,11 +6,18 @@
 
     <groupId>com.oneeyedmen</groupId>
     <artifactId>tdb</artifactId>
-    <version>0.5-SNAPSHOT</version>
+    <version>0.9-SNAPSHOT</version>
 
     <name>TDB</name>
     <description>A reflective test data builder</description>
     <url>http://github.com/dmcg/tdb</url>
+
+    <scm>
+        <connection>scm:git:git@github.com:dmcg/tdb.git</connection>
+        <developerConnection>scm:git:git@github.com:dmcg/tdb.git</developerConnection>
+        <url>https://github.com/dmcg/tdb</url>
+        <tag>HEAD</tag>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -93,6 +100,11 @@
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <autoReleaseAfterClose>true</autoReleaseAfterClose>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <version>2.5.2</version>
             </plugin>
         </plugins>
     </build>

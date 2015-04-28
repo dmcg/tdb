@@ -9,23 +9,30 @@ import java.lang.reflect.Method;
 public class FieldAccess implements Invokable {
 
     private final Object object;
+    private final Invokable next;
 
-    public FieldAccess(Object object) {
+
+    public FieldAccess(Object object, Invokable next) {
         this.object = object;
+        this.next = next;
     }
 
     @Override
     public Object invoke(Invocation invocation) throws Throwable {
         Method method = invocation.getInvokedMethod();
-        if (method.getParameterTypes().length == 0) {
-            Field field = object.getClass().getDeclaredField(fieldNameForAccessor(method));
-            field.setAccessible(true);
-            return field.get(object);
-        } else {
-            Field field = object.getClass().getDeclaredField(fieldNameForMutator(method));
-            field.setAccessible(true);
-            field.set(object, invocation.getParametersAsArray()[0]);
-            return null;
+        try {
+            if (method.getParameterTypes().length == 0) {
+                Field field = object.getClass().getDeclaredField(fieldNameForAccessor(method));
+                field.setAccessible(true);
+                return field.get(object);
+            } else {
+                Field field = object.getClass().getDeclaredField(fieldNameForMutator(method));
+                field.setAccessible(true);
+                field.set(object, invocation.getParametersAsArray()[0]);
+                return null;
+            }
+        } catch (NoSuchFieldException e) {
+            return next.invoke(invocation);
         }
     }
 
@@ -37,7 +44,7 @@ public class FieldAccess implements Invokable {
             return methodName;
     }
 
-    private String fieldNameForAccessor(Method method) {
+    static String fieldNameForAccessor(Method method) {
         String methodName = method.getName();
         if (methodName.startsWith("get")) {
             return removePrefixAnduncapitalise(methodName, 3);
@@ -48,7 +55,7 @@ public class FieldAccess implements Invokable {
             return methodName;
     }
 
-    private String removePrefixAnduncapitalise(String methodName, int index) {
+    private static String removePrefixAnduncapitalise(String methodName, int index) {
         return Character.toLowerCase(methodName.charAt(index)) + methodName.substring(index + 1);
     }
 }

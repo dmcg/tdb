@@ -117,15 +117,9 @@ public class FakerTest {
         assertEquals("A fake ClassToBeFaked", fake.toString());
     }
 
-    @Test public void throws_RuntimeException_on_no_resolution() {
+    @Test public void fakes_accessors_by_name() {
         ClassToBeFaked fake = new Faker<ClassToBeFaked>() {}.get();
-
-        try {
-            fake.name();
-            fail();
-        } catch (RuntimeException x) {
-            assertTrue(x.getCause() instanceof NoSuchFieldException);
-        }
+        assertEquals("name", fake.name());
     }
 
     @Test public void throws_ClassCastException_on_wrong_type() {
@@ -136,8 +130,7 @@ public class FakerTest {
         try {
             fake.name();
             fail();
-        } catch (RuntimeException x) {
-            assertTrue(x instanceof ClassCastException);
+        } catch (ClassCastException x) {
         }
     }
 }

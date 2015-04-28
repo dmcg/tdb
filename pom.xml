@@ -4,7 +4,7 @@
 
     <groupId>com.oneeyedmen</groupId>
     <artifactId>tdb</artifactId>
-    <version>0.10-SNAPSHOT</version>
+    <version>0.10</version>
 
     <name>TDB</name>
     <description>A reflective test data builder</description>
@@ -27,7 +27,7 @@
         <connection>scm:git:git@github.com:dmcg/tdb.git</connection>
         <developerConnection>scm:git:git@github.com:dmcg/tdb.git</developerConnection>
         <url>https://github.com/dmcg/tdb</url>
-        <tag>HEAD</tag>
+        <tag>tdb-0.10</tag>
     </scm>
 
     <properties>

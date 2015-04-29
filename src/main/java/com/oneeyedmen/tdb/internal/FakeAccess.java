@@ -5,6 +5,10 @@ import org.jmock.api.Invocation;
 import org.jmock.api.Invokable;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+import java.util.AbstractList;
+import java.util.List;
 
 
 public class FakeAccess implements Invokable {
@@ -16,6 +20,7 @@ public class FakeAccess implements Invokable {
     private static final Integer DEFAULT_INTEGER = 42;
     private static final Double DEFAULT_DOUBLE = Math.PI;
     private static final Float DEFAULT_FLOAT = (float) Math.PI;
+    private static final String DEFAULT_STRING = "banana";
 
     @Override
     public Object invoke(Invocation invocation) throws Throwable {
@@ -29,25 +34,62 @@ public class FakeAccess implements Invokable {
 
     private Object resultFor(Invocation invocation) {
         Method invokedMethod = invocation.getInvokedMethod();
-        Class<?> returnType = invokedMethod.getReturnType();
+        Type returnType = invokedMethod.getGenericReturnType();
         if (returnType == Void.TYPE)
             throw new NoSuchMethodError(invocation.getInvokedMethod().getName());
         if (returnType == String.class)
             return FieldAccess.fieldNameForAccessor(invokedMethod);
-        if (returnType == Boolean.TYPE)
+        return createA(returnType);
+    }
+
+    private Object createA(Type type) {
+        Class<?> rawType = type instanceof ParameterizedType ? (Class)((ParameterizedType) type).getRawType() : (Class) type;
+        if (rawType == String.class)
+            return DEFAULT_STRING;
+        if (rawType == Boolean.TYPE || rawType == Boolean.class)
             return DEFAULT_BOOLEAN;
-        if (returnType == Integer.TYPE || returnType == Long.TYPE)
+        if (rawType == Integer.TYPE || rawType == Long.TYPE ||
+                rawType == Integer.class || rawType == Long.class)
             return DEFAULT_INTEGER;
-        if (returnType == Float.TYPE)
+        if (rawType == Float.TYPE || rawType == Float.class)
             return DEFAULT_FLOAT;
-        if (returnType == Double.TYPE)
+        if (rawType == Double.TYPE || rawType == Double.class)
             return DEFAULT_DOUBLE;
-        if (returnType == Character.TYPE)
+        if (rawType == Character.TYPE || rawType == Character.class)
             return DEFAULT_CHAR;
-        if (returnType == Byte.TYPE)
+        if (rawType == Byte.TYPE || rawType == Byte.class)
             return DEFAULT_BYTE;
-        if (returnType == Short.TYPE)
+        if (rawType == Short.TYPE || rawType == Byte.class)
             return DEFAULT_SHORT;
-        return Faker.fakeA(returnType);
+        if (List.class.isAssignableFrom(rawType))
+            return new FakeList(firstGenericParameterOf(type));
+        return Faker.fakeA(rawType);
+    }
+
+    private Class<?> firstGenericParameterOf(Type type) {
+        Type thing = ((ParameterizedType) type).getActualTypeArguments()[0];
+        return (Class<?>) thing;
+    }
+
+
+    private class FakeList extends AbstractList {
+
+        private final Class genericType;
+
+        public FakeList(Class genericType) {
+            this.genericType = genericType;
+        }
+
+        @Override
+        public Object get(int index) {
+            if (index >= size())
+                throw new IndexOutOfBoundsException("" + index);
+            return createA(genericType);
+        }
+
+        @Override
+        public int size() {
+            return 3;
+        }
     }
 }

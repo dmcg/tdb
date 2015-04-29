@@ -2,6 +2,8 @@ package com.oneeyedmen.tdb;
 
 import org.junit.Test;
 
+import java.util.List;
+
 import static org.junit.Assert.*;
 
 @SuppressWarnings("UnusedDeclaration")
@@ -19,12 +21,16 @@ public class AutoFakerTest {
         public abstract long aLong();
         public abstract float aFloat();
         public abstract double aDouble();
+        public abstract Integer anInteger();
 
         public abstract void operation();
 
         public abstract Void pathological();
 
         public abstract int function(int a);
+
+        public abstract List<String> aList();
+        public abstract List<AnotherClassToBeFaked> getChildren();
     }
 
     public abstract class AnotherClassToBeFaked {
@@ -48,6 +54,17 @@ public class AutoFakerTest {
         assertEquals(42, fake.aLong());
         assertEquals(Math.PI, fake.aFloat(), 0.00001);
         assertEquals(Math.PI, fake.aDouble(), 0.00001);
+    }
+
+    @Test public void return_defaults_for_boxed() {
+        assertEquals(Integer.valueOf(42), fake.anInteger());
+    }
+
+    @Test public void return_a_list() {
+        assertEquals(3, fake.aList().size());
+        assertEquals("banana", fake.aList().get(0));
+
+        assertEquals("thing", fake.getChildren().get(2).thing());
     }
 
     @Test public void return_another_fake_for_others() {
